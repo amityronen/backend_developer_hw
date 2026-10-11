@@ -1,10 +1,9 @@
 # Melon Market - Backend Developer Assignment
 
-Welcome, and thank you for your time. This assignment is part of the interview process at **Cloudride**.
+Welcome, and thank you for your time. This assignment is part of the interview process.
 It is designed to show us how you read, review, fix, extend and explain real code, which is what a
 backend developer on our team does every day.
 
-- Contact: Ronen Amity - ronen@cloudride.co.il - +972542132377
 - Suggested time box: **about 4 hours**. The scope is larger than the time box on purpose. Prioritise,
   and tell us in the review what you skipped and why. A focused, well-explained partial result is better
   than a rushed complete one.
@@ -310,7 +309,7 @@ Request:
 
 ## 5. Task 4 - AWS architecture (about 30 minutes)
 
-Today everything runs in Docker Compose. Cloudride runs workloads on AWS, so we would like to see how you would host this
+Today everything runs in Docker Compose. We runs workloads on AWS, so we would like to see how you would host this
 system there. Create `AWS.md` with:
 
 1. A diagram of the production environment (Mermaid in a code block is fine, an image is fine too). Include networking,
@@ -344,7 +343,7 @@ Please do not push your work to a public repository.
 
 ## 7. The 45-minute review session
 
-You will present your work to two Cloudride engineers in a single session. Everything is open for questions, so please
+You will present your work to two engineers in a single session. Everything is open for questions, so please
 be ready to open your editor and the running system.
 
 | Time | Topic |
@@ -360,5 +359,3 @@ We are interested in how you think, how you prioritise, and how clearly you expl
 way, and here is why" is a perfectly good thing to say about code that was given to you.
 
 Good luck, and enjoy the melons.
-
-*Cloudride - cloudride.co.il*
