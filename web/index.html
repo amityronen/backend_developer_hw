@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Melon Market</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="site">
+    <h1>Melon Market</h1>
+    <a href="/admin">Admin</a>
+  </header>
+  <main class="layout">
+    <section>
+      <div id="items" class="grid" aria-live="polite"><p class="empty">Loading the catalog...</p></div>
+    </section>
+    <aside class="card basket">
+      <h2>Your basket</h2>
+      <ul id="basket-lines"></ul>
+      <button id="quote-btn" disabled>Get quote</button>
+      <div id="total" class="total"></div>
+      <p class="empty">Quotes only. Checkout is not available yet.</p>
+    </aside>
+  </main>
+  <div id="toast" role="status"></div>
+  <script type="module" src="/js/shop.js"></script>
+</body>
+</html>

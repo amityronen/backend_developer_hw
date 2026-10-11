@@ -1,0 +1,91 @@
+name: melon-market
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: melon
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d melon"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    image: postgres:16-alpine
+    restart: "no"
+    command: ["sh", "/migrate.sh"]
+    environment:
+      PGHOST: postgres
+      PGDATABASE: melon
+      PGUSER: postgres
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      CATALOG_DB_PASSWORD: ${CATALOG_DB_PASSWORD}
+      ADMIN_DB_PASSWORD: ${ADMIN_DB_PASSWORD}
+    volumes:
+      - ./db/migrations:/migrations:ro
+      - ./db/migrate.sh:/migrate.sh:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  rates-mock:
+    build: ./services/rates-mock
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${RATES_PORT:-8003}:8000"
+
+  catalog:
+    build: ./services/catalog
+    restart: unless-stopped
+    environment:
+      DB_HOST: postgres
+      DB_NAME: melon
+      DB_USER: ${ADMIN_DB_USER}
+      DB_PASSWORD: ${ADMIN_DB_PASSWORD}
+      RATES_URL: http://rates-mock:8000
+    ports:
+      - "127.0.0.1:${CATALOG_PORT:-8001}:8000"
+    depends_on:
+      postgres:
+        condition: service_started
+      rates-mock:
+        condition: service_started
+
+  admin:
+    build: ./services/admin
+    restart: unless-stopped
+    environment:
+      DB_HOST: postgres
+      DB_NAME: melon
+      DB_USER: ${ADMIN_DB_USER}
+      DB_PASSWORD: ${ADMIN_DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-480}
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    ports:
+      - "127.0.0.1:${ADMIN_PORT:-8002}:8000"
+    depends_on:
+      postgres:
+        condition: service_started
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${GATEWAY_PORT:-8080}:80"
+    depends_on:
+      catalog:
+        condition: service_started
+      admin:
+        condition: service_started
+
+volumes:
+  pgdata:
